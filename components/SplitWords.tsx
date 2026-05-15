@@ -24,7 +24,7 @@ export default function SplitWords({ text, className, style, delay = 0 }: Props)
             transition={{
               duration: 0.65,
               delay: delay + i * 0.06,
-              ease: [0.22, 1, 0.36, 1],
+              ease: [0.22, 1, 0.36, 1] as [number,number,number,number],
             }}
           >
             {word}

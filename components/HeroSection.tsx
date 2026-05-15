@@ -40,9 +40,11 @@ const containerVariants = {
   show: { transition: { staggerChildren: 0.12 } },
 };
 
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
 const itemVariants = {
   hidden: { opacity: 0, y: 24 },
-  show:   { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] } },
+  show:   { opacity: 1, y: 0, transition: { duration: 0.65, ease: EASE } },
 };
 
 const photoVariants = {
@@ -52,7 +54,7 @@ const photoVariants = {
 
 const photoItem = {
   hidden: { opacity: 0, scale: 0.97, y: 20 },
-  show:   { opacity: 1, scale: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
+  show:   { opacity: 1, scale: 1, y: 0, transition: { duration: 0.7, ease: EASE } },
 };
 
 export default function HeroSection() {
