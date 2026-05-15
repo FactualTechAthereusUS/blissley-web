@@ -7,7 +7,6 @@ interface Props {
   children: ReactNode;
   delay?: number;
   className?: string;
-  as?: keyof JSX.IntrinsicElements;
   duration?: number;
   y?: number;
 }
