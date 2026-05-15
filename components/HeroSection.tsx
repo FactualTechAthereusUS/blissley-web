@@ -130,14 +130,14 @@ export default function HeroSection() {
         animate="show"
       >
         <div className="gap-3" style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gridTemplateRows: "360px 200px" }}>
-          {photoGrid.map(({ src, alt, col, row }) => (
+          {photoGrid.map(({ src, alt, col, row }, i) => (
             <motion.div
               key={src}
               variants={photoItem}
               style={{ gridColumn: col, gridRow: row }}
               className="rounded-2xl overflow-hidden relative"
             >
-              <Image src={src} alt={alt} fill className="object-cover object-top" sizes="20vw" />
+              <Image src={src} alt={alt} fill className="object-cover object-top" sizes="20vw" priority={i < 2} />
             </motion.div>
           ))}
         </div>

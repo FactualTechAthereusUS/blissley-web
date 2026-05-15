@@ -1,8 +1,7 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 
-/* ─── Icons ──────────────────────────────────────────────────── */
 function PlayIcon() {
   return (
     <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
@@ -39,7 +38,7 @@ function SpeakerOffIcon() {
   );
 }
 
-/* ─── Single video card ──────────────────────────────────────── */
+/* ─── Single video card — lazy loads src only when near viewport ─ */
 function VideoCard({
   src,
   index,
@@ -49,53 +48,71 @@ function VideoCard({
   index: number;
   onDragStart: () => void;
 }) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [playing, setPlaying] = useState(true);
+  const [loaded, setLoaded] = useState(false);
+  const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(true);
   const [showIcon, setShowIcon] = useState(false);
 
+  // Lazy-load: inject src + autoplay only when card enters viewport
   useEffect(() => {
-    const v = videoRef.current;
-    if (!v) return;
-    v.play().catch(() => setPlaying(false));
-  }, []);
+    const el = containerRef.current;
+    if (!el) return;
 
-  function togglePlay() {
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !loaded) {
+          setLoaded(true);
+          obs.disconnect();
+        }
+      },
+      { rootMargin: "200px" } // start loading 200px before visible
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [loaded]);
+
+  // Autoplay once src is set
+  useEffect(() => {
+    if (!loaded) return;
     const v = videoRef.current;
     if (!v) return;
-    if (v.paused) {
-      v.play();
-      setPlaying(true);
-    } else {
-      v.pause();
-      setPlaying(false);
-    }
+    v.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
+  }, [loaded]);
+
+  const togglePlay = useCallback(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (v.paused) { v.play(); setPlaying(true); }
+    else { v.pause(); setPlaying(false); }
     setShowIcon(true);
     setTimeout(() => setShowIcon(false), 700);
-  }
+  }, []);
 
-  function toggleMute(e: React.MouseEvent) {
+  const toggleMute = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
     const v = videoRef.current;
     if (!v) return;
     v.muted = !v.muted;
     setMuted(v.muted);
-  }
+  }, []);
 
   return (
     <div
-      className="relative flex-shrink-0 rounded-2xl overflow-hidden cursor-pointer select-none"
+      ref={containerRef}
+      className="relative flex-shrink-0 rounded-2xl overflow-hidden cursor-pointer select-none bg-gray-100"
       style={{ width: "260px", aspectRatio: "9/16" }}
       onClick={togglePlay}
       onPointerDown={onDragStart}
     >
       <video
         ref={videoRef}
-        src={src}
+        src={loaded ? src : undefined}
         loop
         muted
         playsInline
-        autoPlay
+        preload="none"
         className="absolute inset-0 w-full h-full object-cover pointer-events-none"
       />
 
@@ -106,14 +123,16 @@ function VideoCard({
       />
 
       {/* Mute button */}
-      <button
-        onClick={toggleMute}
-        className="absolute top-3 right-3 z-20 w-9 h-9 rounded-full flex items-center justify-center"
-        style={{ backgroundColor: "rgba(0,0,0,0.45)" }}
-        aria-label={muted ? "Unmute" : "Mute"}
-      >
-        {muted ? <SpeakerOffIcon /> : <SpeakerOnIcon />}
-      </button>
+      {loaded && (
+        <button
+          onClick={toggleMute}
+          className="absolute top-3 right-3 z-20 w-9 h-9 rounded-full flex items-center justify-center"
+          style={{ backgroundColor: "rgba(0,0,0,0.45)" }}
+          aria-label={muted ? "Unmute" : "Mute"}
+        >
+          {muted ? <SpeakerOffIcon /> : <SpeakerOnIcon />}
+        </button>
+      )}
 
       {/* Card number */}
       <div
@@ -123,47 +142,41 @@ function VideoCard({
         <span className="text-white text-[10px] font-bold">{index + 1}</span>
       </div>
 
-      {/* Center play/pause flash */}
-      <div
-        className="absolute inset-0 flex items-center justify-center z-10 transition-opacity duration-200"
-        style={{ opacity: !playing || showIcon ? 1 : 0 }}
-      >
-        {playing ? <PauseIcon /> : <PlayIcon />}
-      </div>
+      {/* Play/pause flash */}
+      {loaded && (
+        <div
+          className="absolute inset-0 flex items-center justify-center z-10 transition-opacity duration-200"
+          style={{ opacity: !playing || showIcon ? 1 : 0 }}
+        >
+          {playing ? <PauseIcon /> : <PlayIcon />}
+        </div>
+      )}
     </div>
   );
 }
 
-/* ─── Videos — duplicated for seamless loop ──────────────────── */
 const BASE_VIDEOS = Array.from({ length: 15 }, (_, i) => `/video-${i + 1}.mp4`);
-const VIDEOS = [...BASE_VIDEOS, ...BASE_VIDEOS]; // duplicate for seamless wrap
+const VIDEOS = [...BASE_VIDEOS, ...BASE_VIDEOS];
 
 const CARD_WIDTH = 260;
 const GAP = 12;
 const STEP = CARD_WIDTH + GAP;
-const LOOP_WIDTH = BASE_VIDEOS.length * STEP; // width of one full set
-const SPEED = 0.6; // px per frame (~36px/s at 60fps)
+const LOOP_WIDTH = BASE_VIDEOS.length * STEP;
+const SPEED = 0.6;
 
-/* ─── Results section ────────────────────────────────────────── */
 export default function ResultsSection() {
   const trackRef = useRef<HTMLDivElement>(null);
-  const offsetRef = useRef(0);           // live value driven by rAF
+  const offsetRef = useRef(0);
   const rafRef = useRef<number>(0);
   const isPaused = useRef(false);
-
-  // drag state
   const dragStartX = useRef<number | null>(null);
   const dragStartOffset = useRef(0);
 
-  /* ── animation loop ── */
   useEffect(() => {
     function tick() {
       if (!isPaused.current) {
         offsetRef.current += SPEED;
-        // seamless reset when we've scrolled one full set
-        if (offsetRef.current >= LOOP_WIDTH) {
-          offsetRef.current -= LOOP_WIDTH;
-        }
+        if (offsetRef.current >= LOOP_WIDTH) offsetRef.current -= LOOP_WIDTH;
       }
       if (trackRef.current) {
         trackRef.current.style.transform = `translateX(-${offsetRef.current}px)`;
@@ -174,7 +187,6 @@ export default function ResultsSection() {
     return () => cancelAnimationFrame(rafRef.current);
   }, []);
 
-  /* ── pointer drag ── */
   function onPointerDown(e: React.PointerEvent<HTMLDivElement>) {
     isPaused.current = true;
     dragStartX.current = e.clientX;
@@ -186,26 +198,22 @@ export default function ResultsSection() {
     if (dragStartX.current === null) return;
     const delta = dragStartX.current - e.clientX;
     let next = dragStartOffset.current + delta;
-    // keep within 0..LOOP_WIDTH
     next = ((next % LOOP_WIDTH) + LOOP_WIDTH) % LOOP_WIDTH;
     offsetRef.current = next;
   }
 
   function onPointerUp() {
     dragStartX.current = null;
-    // resume after brief pause
     setTimeout(() => { isPaused.current = false; }, 800);
   }
 
   function onCardDragStart() {
-    // called by each card's onPointerDown — pause auto-scroll
     isPaused.current = true;
     dragStartOffset.current = offsetRef.current;
   }
 
   return (
     <section className="bg-white py-16" id="results">
-      {/* Header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10">
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
           <h2
@@ -213,38 +221,20 @@ export default function ResultsSection() {
             style={{ fontFamily: "var(--font-manrope)" }}
           >
             The results speak{" "}
-            <span
-              style={{
-                fontFamily: "var(--font-playfair), serif",
-                fontStyle: "italic",
-                color: "#1C3829",
-              }}
-            >
+            <span style={{ fontFamily: "var(--font-playfair), serif", fontStyle: "italic", color: "#1C3829" }}>
               for themselves.
             </span>
           </h2>
-
           <div className="flex flex-col gap-4 max-w-sm">
-            <p
-              className="text-sm text-gray-500 leading-relaxed"
-              style={{ fontFamily: "var(--font-manrope)" }}
-            >
-              Sometimes you have to see it to believe it. GLP-1 medication can
-              be{" "}
-              <span className="font-semibold" style={{ color: "#1C3829" }}>
-                life-changing
-              </span>{" "}
-              — improving mood, sleep, energy, and longevity. These are real
-              Blissley patients sharing their stories.
+            <p className="text-sm text-gray-500 leading-relaxed" style={{ fontFamily: "var(--font-manrope)" }}>
+              Sometimes you have to see it to believe it. GLP-1 medication can be{" "}
+              <span className="font-semibold" style={{ color: "#1C3829" }}>life-changing</span>{" "}
+              — improving mood, sleep, energy, and longevity. These are real Blissley patients sharing their stories.
             </p>
             <a
               href="#qualify"
               className="self-start inline-flex items-center justify-center px-6 py-3 rounded-full text-sm font-bold text-white transition-all hover:opacity-90 active:scale-95"
-              style={{
-                backgroundColor: "#111",
-                fontFamily: "var(--font-manrope)",
-                letterSpacing: "0.06em",
-              }}
+              style={{ backgroundColor: "#111", fontFamily: "var(--font-manrope)", letterSpacing: "0.06em" }}
             >
               I&apos;M READY, LET&apos;S GO
             </a>
@@ -252,7 +242,6 @@ export default function ResultsSection() {
         </div>
       </div>
 
-      {/* Slider */}
       <div
         className="relative overflow-hidden"
         onPointerDown={onPointerDown}
@@ -261,27 +250,15 @@ export default function ResultsSection() {
         onPointerCancel={onPointerUp}
         style={{ cursor: "grab" }}
       >
-        {/* Left fade */}
-        <div
-          className="pointer-events-none absolute left-0 top-0 h-full w-16 z-10"
-          style={{ background: "linear-gradient(to right, #fff, transparent)" }}
-        />
-        {/* Right fade */}
-        <div
-          className="pointer-events-none absolute right-0 top-0 h-full w-16 z-10"
-          style={{ background: "linear-gradient(to left, #fff, transparent)" }}
-        />
+        <div className="pointer-events-none absolute left-0 top-0 h-full w-16 z-10"
+          style={{ background: "linear-gradient(to right, #fff, transparent)" }} />
+        <div className="pointer-events-none absolute right-0 top-0 h-full w-16 z-10"
+          style={{ background: "linear-gradient(to left, #fff, transparent)" }} />
 
         <div
           ref={trackRef}
           className="flex"
-          style={{
-            gap: `${GAP}px`,
-            paddingLeft: "32px",
-            paddingRight: "32px",
-            willChange: "transform",
-            userSelect: "none",
-          }}
+          style={{ gap: `${GAP}px`, paddingLeft: "32px", paddingRight: "32px", willChange: "transform", userSelect: "none" }}
         >
           {VIDEOS.map((src, i) => (
             <VideoCard

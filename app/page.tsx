@@ -1,18 +1,21 @@
+import dynamic from "next/dynamic";
 import AnnouncementBar from "@/components/AnnouncementBar";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import TrustBar from "@/components/TrustBar";
-import ProductCards from "@/components/ProductCards";
-import ResultsSection from "@/components/ResultsSection";
-import HowItWorks from "@/components/HowItWorks";
-import Testimonials from "@/components/Testimonials";
-import WeightCalculator from "@/components/WeightCalculator";
-import Reviews from "@/components/Reviews";
-import FAQ from "@/components/FAQ";
-import GuaranteeSection from "@/components/GuaranteeSection";
-import Questionnaire from "@/components/Questionnaire";
-import TrustStrip from "@/components/TrustStrip";
-import Footer from "@/components/Footer";
+
+// Everything below the fold — lazy loaded after hero paints
+const ProductCards    = dynamic(() => import("@/components/ProductCards"));
+const ResultsSection  = dynamic(() => import("@/components/ResultsSection"));
+const Testimonials    = dynamic(() => import("@/components/Testimonials"));
+const WeightCalculator= dynamic(() => import("@/components/WeightCalculator"));
+const HowItWorks      = dynamic(() => import("@/components/HowItWorks"));
+const Reviews         = dynamic(() => import("@/components/Reviews"));
+const FAQ             = dynamic(() => import("@/components/FAQ"));
+const GuaranteeSection= dynamic(() => import("@/components/GuaranteeSection"));
+const Questionnaire   = dynamic(() => import("@/components/Questionnaire"));
+const TrustStrip      = dynamic(() => import("@/components/TrustStrip"));
+const Footer          = dynamic(() => import("@/components/Footer"));
 
 export default function Home() {
   return (
