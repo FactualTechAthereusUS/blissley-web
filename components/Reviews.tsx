@@ -73,7 +73,7 @@ function useMarquee(speed: number) {
     function tick() {
       offset.current += speed;
       if (offset.current >= loopW) offset.current -= loopW;
-      track.style.transform = `translateX(-${offset.current}px)`;
+      (track as HTMLDivElement).style.transform = `translateX(-${offset.current}px)`;
       raf.current = requestAnimationFrame(tick);
     }
     raf.current = requestAnimationFrame(tick);
