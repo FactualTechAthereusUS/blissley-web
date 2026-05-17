@@ -65,28 +65,26 @@ export default function Footer() {
           style={{ fontFamily: "var(--font-manrope)" }}
         >
           <p>
-            *The assessment made available on the Blissley website does not create a
+            The assessment made available on the Blissley website does not create a
             doctor-patient relationship between the individual completing the assessment and
             Blissley. A network of US-licensed doctors that adhere to rigorous medical protocols
             designed for patient safety has established exclusionary criteria to determine if an
-            individual does not qualify for GLP-1s. The answers an individual provides to the
-            Blissley assessment consequently determine if the individual is screened out of
-            eligibility for GLP-1 medication, and a Blissley clinician will meet with an
-            individual after checkout to determine if they qualify for a prescription. Clinicians
-            retain the decision to prescribe compounded GLP-1s to patients.
+            individual qualifies for treatment. The answers an individual provides to the Blissley
+            assessment consequently determine eligibility, and an independent licensed clinician
+            will review the assessment after checkout to determine if they qualify for a
+            prescription. Clinicians retain sole decision-making authority to prescribe medications
+            to patients.
           </p>
           <p>
-            All claims and benefits on this website refer to self-reported data from GLP-1
-            customers on a treatment plan that includes compounded GLP-1 medications and
-            consultations with medical professionals. Customers reported their weight on their
-            initial medical intake questionnaire every 3–4 weeks thereafter. Results from
-            compounded medications found on the Blissley platform may vary and be affected by an
-            individual&apos;s adherence to the program and their clinician&apos;s recommendations.
-            Compounded GLP-1s are produced in FDA-regulated facilities. Although these facilities
-            are highly regulated, the medications are not FDA-approved or evaluated for safety,
-            efficacy, or quality. The decision to use compounded drugs is guided by the licensed
-            provider&apos;s medical judgment, which is informed by a telehealth consultation and
-            medical history.
+            All claims and benefits on this website refer to self-reported data from Blissley
+            patients on a treatment plan that includes compounded medications and consultations
+            with licensed medical professionals. Results from compounded medications found on the
+            Blissley platform may vary and be affected by an individual&apos;s adherence to the
+            program and their clinician&apos;s recommendations. Compounded medications are produced
+            in FDA-regulated facilities. Although these facilities are highly regulated, the
+            medications are not FDA-approved or evaluated for safety, efficacy, or quality. The
+            decision to use compounded drugs is guided by the licensed provider&apos;s medical
+            judgment, which is informed by a telehealth consultation and medical history.
           </p>
           <p>
             We encourage all prospective users of compounded medications to speak with their
@@ -95,39 +93,11 @@ export default function Footer() {
             individuals may receive medication that looks different than what is portrayed on the
             website.
           </p>
-          <p>*Free to end users subject to insurance and copays eligibility to be determined at time of visit.</p>
-
-          {/* Pharmacy Providers */}
-          <div>
-            <p className="text-xs font-semibold text-gray-500 mb-2">Pharmacy Partners</p>
-            <p>
-              We are partnered with multiple USA-certified pharmacies to bring the best product
-              and overall experience to our membership. Our team meets regularly with pharmacies
-              to discuss any product shortages, shipping delays, and to get updated reports on
-              their medication testing.
-            </p>
-          </div>
-
           <p>
-            *Results vary based on starting weight and program adherence. Inches lost from hips,
-            waist, chest, thighs, and arms in the first month. Patients exercised daily and ate a
-            reduced-calorie diet. Their fat loss is not typical. Results may vary. Medication
+            Results vary based on starting program adherence. Results may vary. Medication
             prescriptions are at the discretion of medical providers and may not be suitable for
-            everyone. Blissley patients typically result in 1–2 lbs per week weight loss after
-            4 weeks, involving a healthy diet and exercise changes. Consult a healthcare
-            professional before using medication or starting any weight loss program. *Based on
-            the average weight loss as reported by patients without diabetes who reached and
-            maintained a dose of 2.4 mg/week of GLP-1 treatment, along with a reduced-calorie
-            diet and increased physical activity.
-          </p>
-          <p>
-            Medication is included in the cost of the Blissley Program. Wegovy® is FDA-approved
-            for weight loss. Ozempic® is FDA-approved for type 2 diabetes treatment but may be
-            prescribed for weight loss. The trademarks, service marks, trade names (Wegovy®,
-            Ozempic®), and products displayed on this website are protected and belong to their
-            respective owners. No data, photos, claims, or any other information is associated
-            with results derived from clinical trials, studies, or public information and is
-            always representative of Blissley patient experience.
+            everyone. Consult a healthcare professional before using any medication or starting
+            any wellness program.
           </p>
           <p>
             Certain materials on this website, including text, images, and other media, may be
@@ -143,12 +113,10 @@ export default function Footer() {
           <p>
             By accepting our Terms of Use, you additionally understand and agree that Blissley is
             not acting as a pharmacy, nor does Blissley control or interfere with any such
-            services.
-            <br />
-            By accepting these Terms of Use, you understand and agree that you may be entering
-            into a relationship with a pharmacy, pharmacist, and/or pharmacy group or other such
-            relationship with any one or more such third-party entities. Partner pharmacies
-            include:
+            services. By accepting these Terms of Use, you understand and agree that you may be
+            entering into a relationship with a pharmacy, pharmacist, and/or pharmacy group or
+            other such relationship with any one or more such third-party entities. Partner
+            pharmacies include:
           </p>
 
           {/* Pharmacy list */}
