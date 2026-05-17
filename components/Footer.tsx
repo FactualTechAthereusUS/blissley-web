@@ -14,13 +14,13 @@ const pharmacies = [
 ];
 
 const links = [
-  "Terms & Conditions",
-  "Privacy Policy",
-  "Privacy Practices",
-  "Refund Policy",
-  "Medical Consent",
-  "For California Residents",
-  "Bill of Rights",
+  { label: "Terms & Conditions",     href: "/terms" },
+  { label: "Privacy Policy",         href: "#" },
+  { label: "Privacy Practices",      href: "#" },
+  { label: "Refund Policy",          href: "#" },
+  { label: "Medical Consent",        href: "#" },
+  { label: "For California Residents", href: "#" },
+  { label: "Bill of Rights",         href: "#" },
 ];
 
 export default function Footer() {
@@ -141,14 +141,14 @@ export default function Footer() {
             © 2026 Blissley. All rights reserved.
           </p>
           <nav className="flex flex-wrap justify-center gap-x-4 gap-y-1">
-            {links.map((link) => (
+            {links.map(({ label, href }) => (
               <a
-                key={link}
-                href="#"
+                key={label}
+                href={href}
                 className="text-[11px] text-gray-400 hover:text-gray-600 transition-colors"
                 style={{ fontFamily: "var(--font-manrope)" }}
               >
-                {link}
+                {label}
               </a>
             ))}
           </nav>
