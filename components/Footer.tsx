@@ -18,7 +18,7 @@ const links = [
   { label: "Privacy Policy",         href: "/privacy" },
   { label: "Privacy Practices",      href: "/privacy" },
   { label: "Refund Policy",          href: "/refund" },
-  { label: "Medical Consent",        href: "#" },
+  { label: "Medical Consent",        href: "/consent" },
   { label: "For California Residents", href: "#" },
   { label: "Bill of Rights",         href: "#" },
 ];
