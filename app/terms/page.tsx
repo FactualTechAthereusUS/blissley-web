@@ -439,7 +439,7 @@ const sections = [
         <p className="mt-4 font-semibold text-gray-700">Arbitration Procedure</p>
         <p className="mt-1">Any demand for arbitration by you will be sent to:</p>
         <address className="mt-2 not-italic p-4 rounded-xl bg-gray-50 border border-gray-200 text-sm">
-          Blissley, LLC<br />
+          TheFactual LLC<br />
           131 Continental Dr, Ste 305<br />
           Newark, DE 19713<br />
           <a href="mailto:help@blissley.com" className="underline underline-offset-2" style={{ color: "#1C3829" }}>
@@ -649,7 +649,7 @@ export default function TermsPage() {
               advertisement for services and not any specific medication.
             </p>
             <p className="text-xs text-gray-400" style={{ fontFamily: "var(--font-manrope)" }}>
-              © 2026 Blissley, LLC. All rights reserved.
+              © 2026 TheFactual LLC. All rights reserved.
             </p>
           </div>
 

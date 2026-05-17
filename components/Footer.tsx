@@ -3,7 +3,7 @@ import Image from "next/image";
 
 const contact = [
   { icon: "/@ icon.svg",          w: 25, h: 25, label: "help@blissley.com" },
-  { icon: "/telephone icon.svg",  w: 26, h: 26, label: "(800) 555-0190" },
+  { icon: "/telephone icon.svg",  w: 26, h: 26, label: "(517) 280-1660" },
   { icon: "/mail icon.svg",       w: 24, h: 17, label: "131 Continental Dr. Ste 305, Newark, DE 19713" },
 ];
 
@@ -15,8 +15,8 @@ const pharmacies = [
 
 const links = [
   { label: "Terms & Conditions",     href: "/terms" },
-  { label: "Privacy Policy",         href: "#" },
-  { label: "Privacy Practices",      href: "#" },
+  { label: "Privacy Policy",         href: "/privacy" },
+  { label: "Privacy Practices",      href: "/privacy" },
   { label: "Refund Policy",          href: "#" },
   { label: "Medical Consent",        href: "#" },
   { label: "For California Residents", href: "#" },
@@ -138,7 +138,7 @@ export default function Footer() {
             className="text-[11px] text-gray-400"
             style={{ fontFamily: "var(--font-manrope)" }}
           >
-            © 2026 Blissley. All rights reserved.
+            © 2026 TheFactual LLC. All rights reserved.
           </p>
           <nav className="flex flex-wrap justify-center gap-x-4 gap-y-1">
             {links.map(({ label, href }) => (
