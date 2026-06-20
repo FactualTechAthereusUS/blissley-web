@@ -1,42 +1,35 @@
 import dynamic from "next/dynamic";
-import AnnouncementBar from "@/components/AnnouncementBar";
-import Header from "@/components/Header";
-import HeroSection from "@/components/HeroSection";
-import TrustBar from "@/components/TrustBar";
+import HomeHero from "@/components/HomeHero";
+import HomeBento from "@/components/HomeBento";
 
-// Everything below the fold — lazy loaded after hero paints
-const ProductCards    = dynamic(() => import("@/components/ProductCards"));
-const ResultsSection  = dynamic(() => import("@/components/ResultsSection"));
-const Testimonials    = dynamic(() => import("@/components/Testimonials"));
-const WeightCalculator= dynamic(() => import("@/components/WeightCalculator"));
-const HowItWorks      = dynamic(() => import("@/components/HowItWorks"));
-const Reviews         = dynamic(() => import("@/components/Reviews"));
-const FAQ             = dynamic(() => import("@/components/FAQ"));
-const GuaranteeSection= dynamic(() => import("@/components/GuaranteeSection"));
-const Questionnaire   = dynamic(() => import("@/components/Questionnaire"));
-const TrustStrip      = dynamic(() => import("@/components/TrustStrip"));
-const Footer          = dynamic(() => import("@/components/Footer"));
+const WLNav          = dynamic(() => import("@/components/WLNav"));
+const WLHowItWorks   = dynamic(() => import("@/components/WLHowItWorks"));
+const HomePlatform   = dynamic(() => import("@/components/HomePlatform"));
+const HomeStats      = dynamic(() => import("@/components/HomeStats"));
+const WLTrust        = dynamic(() => import("@/components/WLTrust"));
+const WLTestimonials = dynamic(() => import("@/components/WLTestimonials"));
+const WLFooter       = dynamic(() => import("@/components/WLFooter"));
+
+export const metadata = {
+  title: "Blissley — Healthcare Technology Platform",
+  description:
+    "Blissley connects patients to board-certified physicians and licensed pharmacies. 100% online, all 50 states.",
+};
 
 export default function Home() {
   return (
-    <>
-      <AnnouncementBar />
-      <Header />
+    <div className="min-h-screen bg-white">
+      <WLNav />
       <main>
-        <HeroSection />
-        <TrustBar />
-        <ProductCards />
-        <ResultsSection />
-        <Testimonials />
-        <WeightCalculator />
-        <HowItWorks />
-        <Reviews />
-        <FAQ />
-        <GuaranteeSection />
-        <Questionnaire />
-        <TrustStrip />
+        <HomeHero />
+        <HomeBento />
+        <WLHowItWorks />
+        <HomeStats />
+        <HomePlatform />
+        <WLTrust />
+        <WLTestimonials />
       </main>
-      <Footer />
-    </>
+      <WLFooter />
+    </div>
   );
 }
